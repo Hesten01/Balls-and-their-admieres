@@ -23,9 +23,10 @@ Color COLORS[] = {
 // Definition of Ball
 // Ball stores state and other properties
 // YOUR CODE HERE
+// defining the struct ball and its members
 struct Ball {
     int posx, posy, velx, vely, radius;
-    struct Ball *follows;    // Changed from int* to struct Ball*
+    struct Ball *follows;
     Color color;
 };
 
@@ -37,22 +38,31 @@ struct Ball balls[BALL_COUNT];
 
 // Initializes a ball with random values
 struct Ball *init_ball_random(struct Ball *p) {
+    /// YOUR CODE HERE
+    // this struct takes the ball struct and initializes it
+    // with random values, it also designates a leader ball
+    // it assigns random value to position, velocity, radius and color
+    // the struct member p is a pointer to the ball struct 
   // Randomly initialize state and properties
   p->posx = rand() % WIDTH;
   p->posy = rand() % HEIGHT;
   p->velx = rand() % VEL_MAX;
   p->vely = rand() % VEL_MAX;
-  p->radius = (rand() % (RADIUS_MAX / RADIUS_MIN + 1)) + RADIUS_MIN;
+  p->radius = (rand() % (RADIUS_MAX - RADIUS_MIN + 1)) + RADIUS_MIN;
   p->color = COLORS[rand() % (sizeof(COLORS) / sizeof(COLORS[0]))];
   p->follows = &balls[0];
 
   if (p == &balls[0]) {
-    // First ball is the leader - moves in a more interesting pattern
-    p->velx = 2;  // Give it a constant velocity for smooth movement
-    p->vely = 2;
-    p->follows = p;  // Leader follows itself
-    p->color = RED;  // Make leader red to distinguish it
-    p->radius = RADIUS_MAX;  // Make leader bigger
+    // First ball is the leader, it has its own movement patteren that the other
+    // balls then follow
+
+    //p->velx = 2; these two lines were included when the video was made
+    //p->vely = 2; They were then removed so that the leader ball also moves at random
+
+    p->follows = p;  // the leader ball only follows itself
+    p->color = RED;  // gives the leader ball a distrinct color
+    p->radius = RADIUS_MAX;  // makes the leader ball bigger, therefore making it easy
+    // to spot
   }
   return p;
 }
@@ -60,6 +70,7 @@ struct Ball *init_ball_random(struct Ball *p) {
 // Initialize all `balls`
 void init_balls_random() {
   // YOUR CODE HERE
+  // the for loop initializes all the balls in the ball array
   for (size_t i = 0; i < BALL_COUNT; i++) {
     init_ball_random(&balls[i]);
   }
